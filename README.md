@@ -5,17 +5,18 @@ A modular, reusable template and catalogue for custom AI agents, specialized ski
 Designed to be installed **globally** across your machines (so any new project automatically has access to your agents and skills) or cloned/scaffolded as a template for project-specific swarms.
 
 > [!IMPORTANT]
-> **Maintenance Note**: This `README.md` (and its catalogue tables below) should be updated every time new agents, skills, or scripts are added. You can run `./scripts/update-catalogue.sh` to generate the latest markdown tables.
+> **Maintenance Note**: This `README.md` (and its catalogue tables below) should be updated every time new agents, skills, or scripts are added. Running `./scripts/push.sh` or `./scripts/update-catalogue.sh --write` will update the catalogue tables automatically.
 
 ---
 
 ## 📦 Catalogue
 
+<!-- BEGIN_CATALOGUE -->
 ### 🤖 Registered Agents
 
 | Agent Name | Description | Bundled Skills |
 | :--- | :--- | :--- |
-| [`product-discovery-specialist`](.agents/agents/product-discovery-specialist/agent.md) | Expert Product Discovery Specialist focused on outcomes over outputs, addressing Value and Business Viability risks, and guiding discovery through Opportunity Solution Trees, Two-Dimensional Story Mapping, and User Story Specifications. | `opportunity-solution-tree`, `story-mapping`, `user-story-spec` |
+| [`product-discovery-specialist`](.agents/agents/product-discovery-specialist/agent.md) | Expert Product Discovery Specialist focused on outcomes over outputs, addressing Value and Business Viability risks, and guiding discovery through Opportunity Solution Trees, Two-Dimensional Story Mapping, and User Story Specifications. | `opportunity-solution-tree` `story-mapping` `user-story-spec` |
 
 ### ⚡ Registered Skills
 
@@ -30,9 +31,11 @@ Designed to be installed **globally** across your machines (so any new project a
 | Script | Description | Usage |
 | :--- | :--- | :--- |
 | [`scripts/setup-global.sh`](scripts/setup-global.sh) | Links or copies all agents and skills into the machine's global config (`~/.gemini/config/`) | `./scripts/setup-global.sh` |
-| [`scripts/install-project.sh`](scripts/install-project.sh) | Copies or symlinks `.agents/` into a specific project folder | `./scripts/install-project.sh <project_path>` |
+| [`scripts/push.sh`](scripts/push.sh) | Updates README, imports new global items, commits, and pushes to Git | `./scripts/push.sh "commit message"` |
 | [`scripts/sync.sh`](scripts/sync.sh) | Pulls latest updates from git and updates global links | `./scripts/sync.sh` |
-| [`scripts/update-catalogue.sh`](scripts/update-catalogue.sh) | Automatically scans and generates catalogue tables | `./scripts/update-catalogue.sh` |
+| [`scripts/install-project.sh`](scripts/install-project.sh) | Copies or symlinks `.agents/` into a specific project folder | `./scripts/install-project.sh <project_path>` |
+| [`scripts/update-catalogue.sh`](scripts/update-catalogue.sh) | Automatically scans and updates catalogue tables in README.md | `./scripts/update-catalogue.sh [--write]` |
+<!-- END_CATALOGUE -->
 
 ---
 
@@ -60,6 +63,32 @@ Open any project on your machine — the custom agents (e.g. `@product-discovery
 
 ---
 
+## 🚀 Pushing & Syncing Across Machines
+
+### When You Add or Update Agents/Skills (Pushing):
+Whether you edited files in this repository or added new agents in `~/.gemini/config/`, simply run:
+
+```bash
+./scripts/push.sh "Add agile coach agent and retrospective skill"
+```
+
+This single command:
+1. Detects and imports any new agents/skills created directly in `~/.gemini/config/`.
+2. Automatically updates the catalogue tables in `README.md`.
+3. Ensures all global symlinks are active.
+4. Stages and commits all changes with your message.
+5. Pushes the commit to your remote Git repository.
+
+### When You Move to Another Machine (Pulling):
+To pull down the latest agents and skills on your other machine, simply run:
+
+```bash
+cd ~/Projects/custom-agents-swarm
+./scripts/sync.sh
+```
+
+---
+
 ## 📁 Project-Specific Usage
 
 If you are starting a new project and want to commit a dedicated copy of `.agents/` directly to that repository:
@@ -73,39 +102,3 @@ Or symlink it:
 ```bash
 ./scripts/install-project.sh ~/Projects/my-new-project --symlink
 ```
-
----
-
-## 🔄 Multi-Machine Workflow
-
-When you improve a skill or add a new agent on one machine:
-
-1. **Push your changes**:
-   ```bash
-   git add .
-   git commit -m "Add new agile coach agent and retrospective skill"
-   git push origin main
-   ```
-
-2. **Update on your other machines**:
-   ```bash
-   cd ~/Projects/custom-agents-swarm
-   ./scripts/sync.sh
-   ```
-
----
-
-## ➕ Adding New Agents and Skills
-
-1. **To add an agent**:
-   - Create `.agents/agents/<agent-name>/agent.md`.
-   - Specify name, description, role, and any bundled skills in the YAML frontmatter.
-
-2. **To add a skill**:
-   - Create `.agents/skills/<skill-name>/SKILL.md`.
-   - Add reference guides, templates, and examples inside `references/` and `examples/` subfolders as needed.
-
-3. **Update Catalogue and Sync**:
-   - Run `./scripts/update-catalogue.sh` to get the updated markdown tables.
-   - Update this `README.md`.
-   - Run `./scripts/setup-global.sh --force` (or `./scripts/sync.sh`) to link new additions globally.
