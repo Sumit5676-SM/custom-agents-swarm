@@ -96,6 +96,13 @@ Before moving to story mapping or backlog writing:
 
 ---
 
+## Artifact Persistence
+
+When finalizing the Opportunity Solution Tree for a project initiative, save the deliverable (including visual hierarchy and FigJam/Miro CSV) to:
+- `artifacts/opportunity-solution-trees/<initiative-name>-ost.md`
+
+---
+
 ## Detailed References & Examples
 - Deep-dive guide: [references/ost_framework.md](./references/ost_framework.md)
 - Complete concrete example: [examples/sample_ost.md](./examples/sample_ost.md)

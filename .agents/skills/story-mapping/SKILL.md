@@ -106,6 +106,13 @@ Before proceeding to write detailed user stories:
 
 ---
 
+## Artifact Persistence
+
+When finalizing the Story Map for a project initiative, save the deliverable (including visual matrix and FigJam/Miro CSV) to:
+- `artifacts/story-maps/<initiative-name>-story-map.md`
+
+---
+
 ## Detailed References & Examples
 - Deep-dive guide: [references/story_mapping_guide.md](./references/story_mapping_guide.md)
 - Complete concrete example: [examples/sample_story_map.md](./examples/sample_story_map.md)

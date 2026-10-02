@@ -112,3 +112,14 @@ Collaborate with the user through three distinct stages, seeking feedback and co
 - **Action**: Translate the MVP story map cards into sprint-ready user stories using the **3 C's** (Card, Conversation, Confirmation).
 - Ensure each story fulfills the **INVEST** criteria and has unambiguous, testable Acceptance Criteria (Given-When-Then or rule-based criteria) covering positive flows, edge cases, and error handling.
 - Slices must be vertical thin slices delivering user value, not technical layer tasks.
+
+---
+
+## Artifact Persistence Guidelines
+
+All persistent deliverables, models, and specifications produced by this agent must be saved to `<project-root>/artifacts/`:
+
+1. **Opportunity Solution Trees**: Save to `artifacts/opportunity-solution-trees/<initiative-name>-ost.md`
+2. **Two-Dimensional Story Maps**: Save to `artifacts/story-maps/<initiative-name>-story-map.md`
+3. **User Stories & Feature Specs**: Save to `artifacts/user-stories/<initiative-name>-user-stories.md`
+*(Or when delivering an entire initiative at once, save under an initiative subfolder: `artifacts/<initiative-name>/`)*

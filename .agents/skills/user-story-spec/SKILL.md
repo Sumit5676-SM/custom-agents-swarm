@@ -104,6 +104,13 @@ When drafting user stories:
 
 ---
 
+## Artifact Persistence
+
+When finalizing the User Story Specifications for a project initiative, save the deliverable (including Given-When-Then criteria and business rules) to:
+- `artifacts/user-stories/<initiative-name>-user-stories.md`
+
+---
+
 ## Detailed References & Examples
 - Deep-dive guide: [references/user_story_guide.md](./references/user_story_guide.md)
 - Complete concrete examples: [examples/sample_user_stories.md](./examples/sample_user_stories.md)

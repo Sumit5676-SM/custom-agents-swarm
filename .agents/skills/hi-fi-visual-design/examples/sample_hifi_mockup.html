@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aero Expense - Mobile Receipt Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Colors */
+      --color-primary-600: #0284c7;
+      --color-primary-700: #0369a1;
+      --color-primary-50: #f0f9ff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --surface-page: #f8fafc;
+      --surface-card: #ffffff;
+      --border-subtle: #e2e8f0;
+      --border-control: #cbd5e1;
+      --feedback-success: #16a34a;
+      --feedback-success-bg: #f0fdf4;
+      --feedback-error: #dc2626;
+
+      /* Spacing & Radii */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --elevation-1: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+      --elevation-2: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+      --elevation-3: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--surface-page);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      padding: var(--space-4);
+      min-height: 100vh;
+    }
+
+    .device-container {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--elevation-3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--surface-card);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-btn {
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-primary-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      transition: background 150ms ease;
+    }
+
+    .header-btn:hover {
+      background: var(--color-primary-50);
+    }
+
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Content Area */
+    .app-content {
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Receipt Preview */
+    .receipt-preview-card {
+      background: #0f172a;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--elevation-1);
+    }
+
+    .receipt-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+
+    .receipt-actions {
+      position: absolute;
+      bottom: var(--space-3);
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+
+    .action-chip {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 150ms ease;
+    }
+
+    .action-chip:hover {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* OCR Status Banner */
+    .ocr-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: var(--feedback-success-bg);
+      border: 1px solid #bbf7d0;
+      color: var(--feedback-success);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--surface-card);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-sm);
+      transition: all 150ms ease;
+      outline: none;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--color-primary-600);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Footer / CTA */
+    .app-footer {
+      padding: var(--space-4);
+      border-top: 1px solid var(--border-subtle);
+      background: var(--surface-card);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--color-primary-600);
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      box-shadow: var(--elevation-1);
+      transition: all 150ms ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-700);
+      box-shadow: var(--elevation-2);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="device-container">
+    <!-- Header -->
+    <header class="app-header">
+      <button class="header-btn" onclick="alert('Navigating back')">← Back</button>
+      <h1 class="header-title">Receipt Details</h1>
+      <button class="header-btn" onclick="alert('Closed')">Done</button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-content">
+      <!-- Receipt Photo Preview -->
+      <div class="receipt-preview-card">
+        <img class="receipt-img" src="https://images.unsplash.com/photo-1554415707-9e4c019a3b68?w=800&auto=format&fit=crop&q=80" alt="Scanned Restaurant Receipt">
+        <div class="receipt-actions">
+          <button class="action-chip" onclick="alert('Retake photo')">📷 Retake</button>
+          <button class="action-chip" onclick="alert('Rotating receipt')">🔄 Rotate</button>
+        </div>
+      </div>
+
+      <!-- OCR Confirmation -->
+      <div class="ocr-status">
+        <span>✓</span> Data auto-extracted via smart receipt scan
+      </div>
+
+      <!-- Form Inputs -->
+      <div class="form-group">
+        <label class="form-label" for="merchant">Merchant Name</label>
+        <input class="form-input" id="merchant" type="text" value="Giotto's Italian Bistro">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="date">Date</label>
+          <input class="form-input" id="date" type="text" value="Oct 14, 2026">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="amount">Total Amount</label>
+          <input class="form-input" id="amount" type="text" value="$145.20" style="font-family: 'JetBrains Mono', monospace; font-weight: 500;">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="category">Category</label>
+        <select class="form-select" id="category">
+          <option selected>Meals & Entertainment</option>
+          <option>Airfare & Travel</option>
+          <option>Taxi & Rideshare</option>
+          <option>Lodging & Hotels</option>
+          <option>Office Supplies</option>
+        </select>
+        <span class="helper-text">Select "Meals & Entertainment" for client dining.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="attendees">Client Attendees</label>
+        <input class="form-input" id="attendees" type="text" value="Sarah Jenkins (Acme Corp)">
+        <span class="helper-text">IRS compliance: Required for entertainment expenses.</span>
+      </div>
+    </main>
+
+    <!-- Footer CTA -->
+    <footer class="app-footer">
+      <button class="btn-primary" onclick="alert('Saved to Chicago Q3 Expense Report!')">
+        Attach to Expense Report
+      </button>
+    </footer>
+  </div>
+
+</body>
+</html>
